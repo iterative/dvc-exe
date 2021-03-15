@@ -3,7 +3,7 @@ import base64
 import os
 import sys
 import tempfile
-from subprocess import STDOUT, check_call, check_output
+from subprocess import STDOUT, check_call, check_output, CalledProcessError
 
 CERT_ENV = "EXE_ITERATIVE_CERTIFICATE"
 CERT_PASS_ENV = "EXE_ITERATIVE_CERTIFICATE_PASS"
@@ -26,13 +26,18 @@ if not os.path.exists(args.path):
     print(f"'{args.path}' doesn't exist", file=sys.stderr)
     exit(1)
 
-out = check_output(
-    [
-        "powershell.exe",
-        f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-Listerify",
-    ],
-    stderr=STDOUT,
-)
+try:
+    out = check_output(
+        [
+            "powershell.exe",
+            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-Listerify",
+        ],
+        stderr=STDOUT,
+    )
+except CalledProcessError as exc:
+    print(f"failed to check signature:\n{exc.output}", file=sys.stderr)
+    raise
+
 # TODO: check that it is not signed yet
 print(out)
 
@@ -47,13 +52,18 @@ with tempfile.NamedTemporaryFile() as tmp:
     ]
     check_call(cmd)
 
-out = check_output(
-    [
-        "powershell.exe",
-        f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-Listerify",
-    ],
-    stderr=STDOUT,
-)
+try:
+    out = check_output(
+        [
+            "powershell.exe",
+            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-Listerify",
+        ],
+        stderr=STDOUT,
+    )
+except CalledProcessError as exc:
+    print(f"failed to check signature:\n{exc.output}", file=sys.stderr)
+    raise
+
 # TODO: check that it is signed
 print(out)
 
