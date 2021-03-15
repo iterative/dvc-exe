@@ -30,7 +30,7 @@ try:
     out = check_output(
         [
             "powershell.exe",
-            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-Listerify",
+            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
         ],
         stderr=STDOUT,
     )
@@ -56,7 +56,7 @@ try:
     out = check_output(
         [
             "powershell.exe",
-            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-Listerify",
+            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
         ],
         stderr=STDOUT,
     )
