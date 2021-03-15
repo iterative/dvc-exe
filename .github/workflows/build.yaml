@@ -23,7 +23,7 @@ jobs:
         version=$(./latest.sh)
         echo "::set-output name=version::$version"
     - name: Download dvc exe
-      run: python -m wget https://github.com/iterative/dvc/archive/dvc-${{ steps.latest.outputs.version }}.exe
+      run: python -m wget https://github.com/iterative/dvc/releases/download/${{ steps.latest.outputs.version }}/dvc-${{ steps.latest.outputs.version }}.exe
     - name: Sign
       env:
         EXE_ITERATIVE_CERTIFICATE: ${{ secrets.EXE_ITERATIVE_CERTIFICATE }}
