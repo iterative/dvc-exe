@@ -21,6 +21,7 @@ jobs:
         version=$(./latest.sh)
         echo "::set-output name=version::$version"
     - name: Download dvc exe
+      shell: bash
       run: wget https://github.com/iterative/dvc/archive/dvc-${{ steps.latest.outputs.version }}.exe
     - name: Sign
       env:
