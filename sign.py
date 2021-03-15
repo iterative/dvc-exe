@@ -34,7 +34,7 @@ try:
             "powershell.exe",
             f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
         ],
-        stderr=STDOUT,
+        stderr=STDOUT, shell=True
     )
 except CalledProcessError as exc:
     print(f"failed to check signature:\n{exc.output}", file=sys.stderr)
@@ -47,14 +47,20 @@ print(f"=== signing {args.path}")
 
 with tempfile.NamedTemporaryFile() as tmp:
     tmp.write(base64.b64decode(cert))
-    cmd = [
-        "signtool.exe",
-        f"/F {tmp.name}",
-        f"/P {cert_pass}",
-        "/T http://timestamp.digicert.com",
-        args.path,
-    ]
-    check_call(cmd)
+    try:
+        check_call(
+            [
+                "signtool.exe",
+                f"/F {tmp.name}",
+                f"/P {cert_pass}",
+                "/T http://timestamp.digicert.com",
+                args.path,
+            ],
+            stderr=STDOUT, shell=True
+        )
+    except CalledProcessError as exc:
+        print(f"failed to sign:\n{exc.output}", file=sys.stderr)
+        raise
 
 print("=== checking signed executable")
 
@@ -64,7 +70,7 @@ try:
             "powershell.exe",
             f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
         ],
-        stderr=STDOUT,
+        stderr=STDOUT, shell=True
     )
 except CalledProcessError as exc:
     print(f"failed to check signature:\n{exc.output}", file=sys.stderr)
