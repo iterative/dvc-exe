@@ -26,6 +26,8 @@ if not os.path.exists(args.path):
     print(f"'{args.path}' doesn't exist", file=sys.stderr)
     exit(1)
 
+print("=== checking for existing signature")
+
 try:
     out = check_output(
         [
@@ -41,6 +43,8 @@ except CalledProcessError as exc:
 # TODO: check that it is not signed yet
 print(out)
 
+print(f"=== signing {args.path}")
+
 with tempfile.NamedTemporaryFile() as tmp:
     tmp.write(base64.b64decode(cert))
     cmd = [
@@ -51,6 +55,8 @@ with tempfile.NamedTemporaryFile() as tmp:
         args.path,
     ]
     check_call(cmd)
+
+print("=== checking signed executable")
 
 try:
     out = check_output(
@@ -67,4 +73,4 @@ except CalledProcessError as exc:
 # TODO: check that it is signed
 print(out)
 
-print(f"successfully signed '{args.path}'")
+print(f"=== successfully signed '{args.path}'")
