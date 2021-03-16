@@ -1,4 +1,5 @@
 import sys
+import posixpath
 import argparse
 from subprocess import STDOUT, check_call, check_output, CalledProcessError
 
@@ -8,10 +9,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("path", help="path to the executable to upload")
 args = parser.parse_args()
 
+dest = posixpath.join(DEST, os.path.basename(args.path))
+
 try:
     out = check_output(
         [
-            "aws", "s3", "cp", args.path, DEST, "--acl", "public-read",
+            "aws", "s3", "cp", args.path, dest, "--acl", "public-read",
         ],
         stderr=STDOUT, shell=True
     )
