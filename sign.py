@@ -69,6 +69,7 @@ with tempfile.NamedTemporaryFile() as tmp:
         check_call(
             [
                 "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\signtool.exe",
+                "sign",
                 f"/F {tmp.name}",
                 f"/P {cert_pass}",
                 "/T http://timestamp.digicert.com",
