@@ -52,8 +52,10 @@ print("\n".join(sdks))
 sdk = sdks[0]
 print(f"using {sdk}")
 path = os.pathsep.join(
-    os.path.join(sdks_path, sdk, "bin"),
-    os.environ.get("PATH", os.defpath),
+    [
+        os.path.join(sdks_path, sdk, "bin"),
+        os.environ.get("PATH", os.defpath),
+    ],
 )
 env = dict(os.environ, PATH=path)
 
