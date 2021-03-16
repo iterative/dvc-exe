@@ -43,27 +43,9 @@ except CalledProcessError as exc:
 # TODO: check that it is not signed yet
 print(out)
 
-print("=== checking available SDKs")
-sdks_path = "C:\Program Files (x86)\Microsoft SDKs\Windows"
-sdks = os.listdir(sdks_path)
-if not sdks:
-    print("no SDKs found", file=sys.stderr)
-print("\n".join(sdks))
-sdk = sdks[0]
-sdk_bin = os.path.join(sdks_path, sdk, "bin")
-print(f"using {sdk}")
-path = os.pathsep.join(
-    [
-        sdk_bin,
-        os.environ.get("PATH", os.defpath),
-    ],
-)
-env = dict(os.environ, PATH=path)
-print("\n".join(os.listdir(sdk_bin)))
-
 print(f"=== signing {args.path}")
 
-with tempfile.NamedTemporaryFile() as tmp:
+with tempfile.NamedTemporaryFile(suffix=".pfx") as tmp:
     tmp.write(base64.b64decode(cert))
     try:
         check_call(
