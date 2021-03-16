@@ -54,9 +54,9 @@ try:
         [
             "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\signtool.exe",
             "sign",
-            f"/F {cert_path}",
-            f"/P {cert_pass}",
-            "/T http://timestamp.digicert.com",
+            "/F", cert_path,
+            "/P", cert_pass,
+            "/T", "http://timestamp.digicert.com",
             args.path,
         ],
         stderr=STDOUT, shell=True,
