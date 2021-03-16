@@ -15,9 +15,7 @@ jobs:
       with:
         python-version: 3.7
     - name: Install requirements
-      run: |
-        pip install -r requirements.txt
-        choco install windows-sdk-10.1
+      run: pip install -r requirements.txt
     - name: Get latest dvc version
       id: latest
       shell: bash
