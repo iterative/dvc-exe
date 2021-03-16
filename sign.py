@@ -43,6 +43,8 @@ except CalledProcessError as exc:
 # TODO: check that it is not signed yet
 print(out)
 
+print("available sdks:\n" + "\n".join(os.listdir("C:\Program Files (x86)\Microsoft SDKs\Windows")))
+
 print(f"=== signing {args.path}")
 
 with tempfile.NamedTemporaryFile() as tmp:
