@@ -1,3 +1,4 @@
+import sys
 import argparse
 from subprocess import STDOUT, check_call, check_output, CalledProcessError
 
