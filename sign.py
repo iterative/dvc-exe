@@ -57,7 +57,7 @@ with tempfile.NamedTemporaryFile(suffix=".pfx") as tmp:
                 "/T http://timestamp.digicert.com",
                 args.path,
             ],
-            stderr=STDOUT, shell=True, env=env,
+            stderr=STDOUT, shell=True,
         )
     except CalledProcessError as exc:
         print(f"failed to sign:\n{exc.output}", file=sys.stderr)
