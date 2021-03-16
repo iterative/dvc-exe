@@ -7,6 +7,7 @@ from subprocess import STDOUT, check_call, check_output, CalledProcessError
 
 CERT_ENV = "EXE_ITERATIVE_CERTIFICATE"
 CERT_PASS_ENV = "EXE_ITERATIVE_CERTIFICATE_PASS"
+SIGNTOOL = "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\signtool.exe"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("path", help="path to the executable to sign")
@@ -52,7 +53,7 @@ print(f"=== signing {args.path}")
 try:
     check_call(
         [
-            "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\signtool.exe",
+            SIGNTOOL,
             "sign",
             "/F", cert_path,
             "/P", cert_pass,
@@ -65,21 +66,19 @@ except CalledProcessError as exc:
     print(f"failed to sign:\n{exc.output.decode()}", file=sys.stderr)
     raise
 
-print("=== checking signed executable")
+print("=== verifying signed executable")
 
 try:
-    out = check_output(
+    check_call(
         [
-            "powershell.exe",
-            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
+            SIGNTOOL,
+            "verify",
+            args.path,
         ],
-        stderr=STDOUT, shell=True
+        stderr=STDOUT, shell=True,
     )
 except CalledProcessError as exc:
-    print(f"failed to check signature:\n{exc.output.decode()}", file=sys.stderr)
+    print(f"failed to sign:\n{exc.output.decode()}", file=sys.stderr)
     raise
-
-# TODO: check that it is signed
-print(out.decode())
 
 print(f"=== successfully signed '{args.path}'")
