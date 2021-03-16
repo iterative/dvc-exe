@@ -1,2 +1,3 @@
 wget
 pre-commit
+awscli
