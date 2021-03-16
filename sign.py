@@ -50,14 +50,16 @@ if not sdks:
     print("no SDKs found", file=sys.stderr)
 print("\n".join(sdks))
 sdk = sdks[0]
+sdk_bin = os.path.join(sdks_path, sdk, "bin")
 print(f"using {sdk}")
 path = os.pathsep.join(
     [
-        os.path.join(sdks_path, sdk, "bin"),
+        sdk_bin,
         os.environ.get("PATH", os.defpath),
     ],
 )
 env = dict(os.environ, PATH=path)
+print("\n".join(os.listdir(sdk_bin)))
 
 print(f"=== signing {args.path}")
 
