@@ -51,7 +51,11 @@ if not sdks:
 print("\n".join(sdks))
 sdk = sdks[0]
 print(f"using {sdk}")
-signtool = os.path.join(sdks_path, sdk, "bin", "signtool.exe")
+path = os.pathsep.join(
+    os.path.join(sdks_path, sdk, "bin"),
+    os.environ.get("PATH", os.defpath),
+)
+env = dict(os.environ, PATH=path)
 
 print(f"=== signing {args.path}")
 
@@ -60,13 +64,13 @@ with tempfile.NamedTemporaryFile() as tmp:
     try:
         check_call(
             [
-                signtool,
+                "signtool.exe",
                 f"/F {tmp.name}",
                 f"/P {cert_pass}",
                 "/T http://timestamp.digicert.com",
                 args.path,
             ],
-            stderr=STDOUT, shell=True
+            stderr=STDOUT, shell=True, env=env,
         )
     except CalledProcessError as exc:
         print(f"failed to sign:\n{exc.output}", file=sys.stderr)
