@@ -49,23 +49,21 @@ print(out)
 
 print(f"=== signing {args.path}")
 
-with tempfile.NamedTemporaryFile(suffix=".pfx") as tmp:
-    tmp.write(base64.b64decode(cert))
-    try:
-        check_call(
-            [
-                "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\signtool.exe",
-                "sign",
-                f"/F {cert_path}",
-                f"/P {cert_pass}",
-                "/T http://timestamp.digicert.com",
-                args.path,
-            ],
-            stderr=STDOUT, shell=True,
-        )
-    except CalledProcessError as exc:
-        print(f"failed to sign:\n{exc.output}", file=sys.stderr)
-        raise
+try:
+    check_call(
+        [
+            "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\signtool.exe",
+            "sign",
+            f"/F {cert_path}",
+            f"/P {cert_pass}",
+            "/T http://timestamp.digicert.com",
+            args.path,
+        ],
+        stderr=STDOUT, shell=True,
+    )
+except CalledProcessError as exc:
+    print(f"failed to sign:\n{exc.output}", file=sys.stderr)
+    raise
 
 print("=== checking signed executable")
 
