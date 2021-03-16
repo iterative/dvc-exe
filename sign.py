@@ -69,17 +69,18 @@ except CalledProcessError as exc:
 print("=== verifying signed executable")
 
 try:
-    check_call(
+    out = check_output(
         [
-            SIGNTOOL,
-            "verify",
-            "/pa",
-            args.path,
+            "powershell.exe",
+            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
         ],
-        stderr=STDOUT, shell=True,
+        stderr=STDOUT, shell=True
     )
 except CalledProcessError as exc:
-    print(f"failed to sign:\n{exc.output.decode()}", file=sys.stderr)
+    print(f"failed to check signature:\n{exc.output.decode()}", file=sys.stderr)
     raise
+
+# TODO: check that it is properly signed
+print(out.decode())
 
 print(f"=== successfully signed '{args.path}'")
