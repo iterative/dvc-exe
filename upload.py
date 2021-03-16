@@ -14,9 +14,7 @@ dest = posixpath.join(DEST, os.path.basename(args.path))
 
 try:
     out = check_output(
-        [
-            "aws", "s3", "cp", args.path, dest, "--acl", "public-read",
-        ],
+        f"aws s3 cp {args.path} {dest} --acl public-read",
         stderr=STDOUT, shell=True
     )
 except CalledProcessError as exc:
