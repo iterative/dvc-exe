@@ -18,7 +18,7 @@ if not cert:
     exit(1)
 
 cert_path = "cert.pfx"
-with open(cert_path, "w") as fobj:
+with open(cert_path, "wb") as fobj:
     fobj.write(base64.b64decode(cert))
     
 cert_pass = os.getenv(CERT_PASS_ENV)
