@@ -43,7 +43,15 @@ except CalledProcessError as exc:
 # TODO: check that it is not signed yet
 print(out)
 
-print("available sdks:\n" + "\n".join(os.listdir("C:\Program Files (x86)\Microsoft SDKs\Windows")))
+print("=== checking available SDKs")
+sdks_path = "C:\Program Files (x86)\Microsoft SDKs\Windows"
+sdks = os.listdir(sdks_path)
+if not sdks:
+    print("no SDKs found", file=sys.stderr)
+print("\n".join(sdks))
+sdk = sdks[0]
+print(f"using {sdk}")
+signtool = os.path.join(sdks_path, sdk, "bin", "signtool.exe")
 
 print(f"=== signing {args.path}")
 
@@ -52,7 +60,7 @@ with tempfile.NamedTemporaryFile() as tmp:
     try:
         check_call(
             [
-                "signtool.exe",
+                signtool,
                 f"/F {tmp.name}",
                 f"/P {cert_pass}",
                 "/T http://timestamp.digicert.com",
