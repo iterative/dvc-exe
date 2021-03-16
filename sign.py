@@ -41,11 +41,11 @@ try:
         stderr=STDOUT, shell=True
     )
 except CalledProcessError as exc:
-    print(f"failed to check signature:\n{exc.output}", file=sys.stderr)
+    print(f"failed to check signature:\n{exc.output.decode()}", file=sys.stderr)
     raise
 
 # TODO: check that it is not signed yet
-print(out)
+print(out.decode())
 
 print(f"=== signing {args.path}")
 
@@ -62,7 +62,7 @@ try:
         stderr=STDOUT, shell=True,
     )
 except CalledProcessError as exc:
-    print(f"failed to sign:\n{exc.output}", file=sys.stderr)
+    print(f"failed to sign:\n{exc.output.decode()}", file=sys.stderr)
     raise
 
 print("=== checking signed executable")
@@ -76,10 +76,10 @@ try:
         stderr=STDOUT, shell=True
     )
 except CalledProcessError as exc:
-    print(f"failed to check signature:\n{exc.output}", file=sys.stderr)
+    print(f"failed to check signature:\n{exc.output.decode()}", file=sys.stderr)
     raise
 
 # TODO: check that it is signed
-print(out)
+print(out.decode())
 
 print(f"=== successfully signed '{args.path}'")
