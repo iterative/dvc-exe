@@ -73,6 +73,7 @@ try:
         [
             SIGNTOOL,
             "verify",
+            "/pa",
             args.path,
         ],
         stderr=STDOUT, shell=True,
