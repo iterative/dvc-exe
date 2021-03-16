@@ -17,6 +17,10 @@ if not cert:
     print(f"'{CERT_ENV}' env var is required", file=sys.stderr)
     exit(1)
 
+cert_path = "cert.pfx"
+with open(cert_path, "w") as fobj:
+    fobj.write(base64.b64decode(cert))
+    
 cert_pass = os.getenv(CERT_PASS_ENV)
 if not cert_pass:
     print(f"'{CERT_PASS_ENV}' env var is required", file=sys.stderr)
@@ -52,7 +56,7 @@ with tempfile.NamedTemporaryFile(suffix=".pfx") as tmp:
             [
                 "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\signtool.exe",
                 "sign",
-                f"/F {tmp.name}",
+                f"/F {cert_path}",
                 f"/P {cert_pass}",
                 "/T http://timestamp.digicert.com",
                 args.path,
