@@ -10,10 +10,10 @@ jobs:
     runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2.3.2
-    - name: Set up Python 3.7
+    - name: Set up Python 3.8
       uses: actions/setup-python@v2.1.4
       with:
-        python-version: 3.7
+        python-version: 3.8
     - name: Install requirements
       run: pip install -r requirements.txt
     - name: Get latest dvc version
