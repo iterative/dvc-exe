@@ -31,7 +31,7 @@ jobs:
         gem install --no-document fpm
     - name: Build
       run: |
-        dvc pull --cd dvc
+        dvc --cd dvc pull
         python dvc\scripts\build.py exe
     - name: Sign
       env:
