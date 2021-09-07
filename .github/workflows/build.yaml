@@ -22,15 +22,24 @@ jobs:
       run: |
         version=$(./latest.sh)
         echo "::set-output name=version::$version"
-    - name: Download dvc exe
-      run: python -m wget https://github.com/iterative/dvc/releases/download/${{ steps.latest.outputs.version }}/dvc-${{ steps.latest.outputs.version }}.exe
+    - name: Download dvc pkg
+      run: python download.py
+    - name: Install dvc requirements
+      run: |
+        pip install .\dvc[all]
+        pip install -r dvc\scripts\build-requirements.txt
+        gem install --no-document fpm
+    - name: Build
+      run: |
+        dvc pull -C dvc
+        python dvc\scripts\build.py exe
     - name: Sign
       env:
         EXE_ITERATIVE_CERTIFICATE: ${{ secrets.EXE_ITERATIVE_CERTIFICATE }}
         EXE_ITERATIVE_CERTIFICATE_PASS: ${{ secrets.EXE_ITERATIVE_CERTIFICATE_PASS }}
-      run: python sign.py dvc-${{ steps.latest.outputs.version }}.exe
+      run: python sign.py scripts\innosetup\dvc-${{ steps.latest.outputs.version }}.exe
     - name: Upload
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: python upload.py dvc-${{ steps.latest.outputs.version }}.exe
+      run: python upload.py scripts\innosetup\dvc-${{ steps.latest.outputs.version }}.exe
