@@ -37,9 +37,9 @@ jobs:
       env:
         EXE_ITERATIVE_CERTIFICATE: ${{ secrets.EXE_ITERATIVE_CERTIFICATE }}
         EXE_ITERATIVE_CERTIFICATE_PASS: ${{ secrets.EXE_ITERATIVE_CERTIFICATE_PASS }}
-      run: python sign.py scripts\innosetup\dvc-${{ steps.latest.outputs.version }}.exe
+      run: python sign.py dvc\scripts\innosetup\dvc-${{ steps.latest.outputs.version }}.exe
     - name: Upload
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: python upload.py scripts\innosetup\dvc-${{ steps.latest.outputs.version }}.exe
+      run: python upload.py dvc\scripts\innosetup\dvc-${{ steps.latest.outputs.version }}.exe
