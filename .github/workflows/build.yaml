@@ -29,6 +29,7 @@ jobs:
         pip install .\dvc[all]
         pip install -r dvc\scripts\build-requirements.txt
         gem install --no-document fpm
+        dvc doctor
     - name: Build
       run: |
         dvc --cd dvc pull
