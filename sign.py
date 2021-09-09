@@ -3,7 +3,10 @@ import base64
 import os
 import sys
 import tempfile
+
+from glob import glob
 from subprocess import STDOUT, check_call, check_output, CalledProcessError
+
 
 CERT_ENV = "EXE_ITERATIVE_CERTIFICATE"
 CERT_PASS_ENV = "EXE_ITERATIVE_CERTIFICATE_PASS"
@@ -12,6 +15,8 @@ SIGNTOOL = "C:\\Program Files (x86)\\Windows Kits\\10\\App Certification Kit\\si
 parser = argparse.ArgumentParser()
 parser.add_argument("path", help="path to the executable to sign")
 args = parser.parse_args()
+
+path, = glob(args.path)
 
 cert = os.getenv(CERT_ENV)
 if not cert:
@@ -27,8 +32,8 @@ if not cert_pass:
     print(f"'{CERT_PASS_ENV}' env var is required", file=sys.stderr)
     exit(1)
 
-if not os.path.exists(args.path):
-    print(f"'{args.path}' doesn't exist", file=sys.stderr)
+if not os.path.exists(path):
+    print(f"'{path}' doesn't exist", file=sys.stderr)
     exit(1)
 
 print("=== checking for existing signature")
@@ -37,7 +42,7 @@ try:
     out = check_output(
         [
             "powershell.exe",
-            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
+            f"(Get-AuthenticodeSignature -FilePath {path}).SignerCertificate | Format-List",
         ],
         stderr=STDOUT, shell=True
     )
@@ -48,7 +53,7 @@ except CalledProcessError as exc:
 # TODO: check that it is not signed yet
 print(out.decode())
 
-print(f"=== signing {args.path}")
+print(f"=== signing {path}")
 
 try:
     check_call(
@@ -58,7 +63,7 @@ try:
             "/F", cert_path,
             "/P", cert_pass,
             "/T", "http://timestamp.digicert.com",
-            args.path,
+            path,
         ],
         stderr=STDOUT, shell=True,
     )
@@ -72,7 +77,7 @@ try:
     out = check_output(
         [
             "powershell.exe",
-            f"(Get-AuthenticodeSignature -FilePath {args.path}).SignerCertificate | Format-List",
+            f"(Get-AuthenticodeSignature -FilePath {path}).SignerCertificate | Format-List",
         ],
         stderr=STDOUT, shell=True
     )
@@ -83,4 +88,4 @@ except CalledProcessError as exc:
 # TODO: check that it is properly signed
 print(out.decode())
 
-print(f"=== successfully signed '{args.path}'")
+print(f"=== successfully signed '{path}'")
