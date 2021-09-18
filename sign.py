@@ -60,6 +60,7 @@ try:
         [
             SIGNTOOL,
             "sign",
+            "/fd", "SHA256",
             "/F", cert_path,
             "/P", cert_pass,
             "/T", "http://timestamp.digicert.com",
