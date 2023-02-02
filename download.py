@@ -5,7 +5,7 @@ import posixpath
 import shutil
 
 
-VERSION = "2.43.1"
+VERSION = "null"
 URL = "https://github.com/iterative/dvc"
 
 path = pathlib.Path(__file__).parent.absolute()
