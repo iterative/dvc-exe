@@ -1,0 +1,4 @@
+['remote "dvc"']
+url = https://remote.dvc.org/dvc
+[core]
+remote = dvc
