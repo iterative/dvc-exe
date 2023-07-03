@@ -22,16 +22,16 @@ jobs:
     - name: Install dvc requirements
       run: |
         pip install .\dvc[all]
-        pip install -r dvc\scripts\build-requirements.txt
+        # https://github.com/iterative/dvc/issues/7949
+        pip install PyInstaller==5.9.0
+        # https://github.com/iterative/dvc/issues/9654
+        pip install flufl-lock==7.1.1
         dvc doctor
     - name: Set pkg type
       shell: bash
       run: echo 'PKG = "exe"' > dvc/_build.py
     - name: Build binary
-      run: python dvc\scripts\pyinstaller\build.py
-    - name: Move binary
-      shell: bash
-      run: cp -a dvc/scripts/pyinstaller/dist dist
+      run: python build_bin.py
     - name: Pull images
       run: dvc pull
     - name: Build package
