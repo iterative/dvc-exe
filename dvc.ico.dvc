@@ -1,3 +1,4 @@
 outs:
 - md5: 90104d9e83cfb825cf45507e90aadd27
   path: dvc.ico
+  size: 211598

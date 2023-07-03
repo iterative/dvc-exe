@@ -1,3 +1,4 @@
 outs:
 - md5: 9106cda08aa427e73492389a0f17c72d
   path: dvc_left.bmp
+  size: 206122
