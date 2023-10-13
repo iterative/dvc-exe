@@ -23,6 +23,9 @@ jobs:
       run: pip install -r requirements.txt
     - name: Download dvc pkg
       run: python download.py
+    - name: Set pkg type
+      shell: bash
+      run: echo 'PKG = "exe"' > dvc/dvc/_build.py
     - name: Install dvc requirements
       run: |
         pip install .\dvc[all]
@@ -31,9 +34,6 @@ jobs:
         # https://github.com/iterative/dvc/issues/9654
         pip install flufl-lock==7.1.1
         dvc doctor
-    - name: Set pkg type
-      shell: bash
-      run: echo 'PKG = "exe"' > dvc/_build.py
     - name: Build binary
       run: python build_bin.py
     - name: Pull images

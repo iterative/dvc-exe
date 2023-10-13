@@ -40,5 +40,6 @@ remotes = [
 ]
 
 print(out)
+assert "(exe)" in out.splitlines()[0]
 for remote in remotes:
     assert f"\t{remote}" in out, f"Missing support for {remote}"
