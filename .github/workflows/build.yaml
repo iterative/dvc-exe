@@ -44,6 +44,7 @@ jobs:
       env:
         EXE_ITERATIVE_CERTIFICATE: ${{ secrets.EXE_ITERATIVE_CERTIFICATE }}
         EXE_ITERATIVE_CERTIFICATE_PASS: ${{ secrets.EXE_ITERATIVE_CERTIFICATE_PASS }}
+        PSModulePath: ""
       run: python sign.py dvc-*.exe
     - uses: aws-actions/configure-aws-credentials@v1
       with:
