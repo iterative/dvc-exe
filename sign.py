@@ -38,6 +38,9 @@ if not os.path.exists(path):
 
 print("=== checking for existing signature")
 
+# https://github.com/PowerShell/PowerShell/issues/18530#issuecomment-1325691850
+os.environ['PSModulePath'] = ''
+
 try:
     out = check_output(
         [
