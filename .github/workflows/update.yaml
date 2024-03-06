@@ -18,8 +18,7 @@ jobs:
     - name: get latest dvc version
       id: latest
       shell: bash
-      run: |
-        echo "version=$(./latest.sh)" >> $GITHUB_OUTPUT
+      run: echo "version=$(./latest.sh)" >> $GITHUB_OUTPUT
     - name: try update
       id: update
       shell: bash
