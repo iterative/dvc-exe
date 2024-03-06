@@ -14,11 +14,11 @@ jobs:
       id-token: write
     runs-on: windows-2019
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: "3.11"
     - name: Install requirements
       run: pip install -r requirements.txt
     - name: Download dvc pkg
@@ -46,13 +46,14 @@ jobs:
         EXE_ITERATIVE_CERTIFICATE_PASS: ${{ secrets.EXE_ITERATIVE_CERTIFICATE_PASS }}
         PSModulePath: ""
       run: python sign.py dvc-*.exe
-    - uses: aws-actions/configure-aws-credentials@v1
+    - uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-east-2
         role-to-assume: arn:aws:iam::260760892802:role/dvc-public-exe-deployer
     - name: Upload
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       run: python upload.py dvc-*.exe
+
   notify:
     if: github.ref == 'refs/heads/main' && failure()
     needs: [windows]
@@ -63,6 +64,6 @@ jobs:
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_COLOR: ${{ job.status }}
-        SLACK_MESSAGE: 'Package build failed for Windows'
+        SLACK_MESSAGE: 'Package build failed for ${{ github.repository }}'
         SLACK_TITLE: CI Status
         SLACK_USERNAME: dvc-pkg-build

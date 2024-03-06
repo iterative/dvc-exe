@@ -4,6 +4,9 @@ on:
     branches: main
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [dvc_release]
 
 permissions:
   contents: write
@@ -39,3 +42,13 @@ jobs:
       run: gh pr merge --squash --delete-branch ${{ steps.create-pr.outputs.pull-request-url }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Send message to slack
+      if: failure()
+      uses: rtCamp/action-slack-notify@v2.2.1
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_MESSAGE: 'Package update failed for ${{ github.repository }}'
+        SLACK_TITLE: CI Status
+        SLACK_USERNAME: dvc-pkg-update
