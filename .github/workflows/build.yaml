@@ -43,13 +43,13 @@ jobs:
     - name: Install JSign
       run: |
         curl --location --remote-name https://github.com/ebourg/jsign/releases/download/4.2/jsign-4.2.jar
-        sha256sum -c <<< "290377fc4f593256200b3ea4061b7409e8276255f449d4c6de7833faf0850cc1  jsign-4.2.jar"
+        echo "290377fc4f593256200b3ea4061b7409e8276255f449d4c6de7833faf0850cc1  jsign-4.2.jar" | sha256sum -c
     - uses: google-github-actions/auth@v2
       with:
         project_id: dvc-artifact-signing
-        workload_identity_provider: projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+        workload_identity_provider: projects/680041843771/locations/global/workloadIdentityPools/github/providers/github
     - name: Sign
-      run: java -jar jsign.jar dvc-*.exe
+      run: java -jar jsign-4.2.jar dvc-*.exe
         --storetype GOOGLECLOUD
         --storepass $(gcloud auth print-access-token)
         --keystore projects/dvc-artifact-signing/locations/global/keyRings/code-signing
