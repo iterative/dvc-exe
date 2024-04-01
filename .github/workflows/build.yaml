@@ -48,6 +48,7 @@ jobs:
       with:
         project_id: dvc-artifact-signing
         workload_identity_provider: projects/680041843771/locations/global/workloadIdentityPools/github/providers/github
+        service_account: github@dvc-artifact-signing.iam.gserviceaccount.com
     - name: Sign
       run: java -jar jsign-4.2.jar dvc-*.exe
         --storetype GOOGLECLOUD
