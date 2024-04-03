@@ -40,12 +40,25 @@ jobs:
       run: dvc pull
     - name: Build package
       run: python build.py
+    - name: Install JSign
+      run: |
+        curl --location --remote-name https://github.com/ebourg/jsign/releases/download/4.2/jsign-4.2.jar
+        sha256sum jsign-4.2.jar | grep 290377fc4f593256200b3ea4061b7409e8276255f449d4c6de7833faf0850cc1
+    - uses: google-github-actions/auth@v2
+      with:
+        project_id: dvc-artifact-signing
+        workload_identity_provider: projects/680041843771/locations/global/workloadIdentityPools/github/providers/github
+        service_account: github@dvc-artifact-signing.iam.gserviceaccount.com
     - name: Sign
-      env:
-        EXE_ITERATIVE_CERTIFICATE: ${{ secrets.EXE_ITERATIVE_CERTIFICATE }}
-        EXE_ITERATIVE_CERTIFICATE_PASS: ${{ secrets.EXE_ITERATIVE_CERTIFICATE_PASS }}
-        PSModulePath: ""
-      run: python sign.py dvc-*.exe
+      run: java -jar jsign-4.2.jar dvc-*.exe
+        --storetype GOOGLECLOUD
+        --storepass $(gcloud auth print-access-token)
+        --keystore projects/dvc-artifact-signing/locations/global/keyRings/certificates
+        --alias windows
+        --certfile certificate_chain.pem
+        --tsmode RFC3161
+        --tsaurl http://timestamp.digicert.com
+        --alg SHA-256
     - uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-east-2
