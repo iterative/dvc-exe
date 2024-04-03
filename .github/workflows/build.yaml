@@ -53,7 +53,7 @@ jobs:
       run: java -jar jsign-4.2.jar dvc-*.exe
         --storetype GOOGLECLOUD
         --storepass $(gcloud auth print-access-token)
-        --keystore projects/dvc-artifact-signing/locations/global/keyRings/code-signing
+        --keystore projects/dvc-artifact-signing/locations/global/keyRings/certificates
         --alias windows
         --certfile certificate_chain.pem
         --tsmode RFC3161
