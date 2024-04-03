@@ -66,6 +66,12 @@ jobs:
     - name: Upload
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       run: python upload.py dvc-*.exe
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: signed-binary
+        path: dvc-*.exe
+        if-no-files-found: error
 
   notify:
     if: github.ref == 'refs/heads/main' && failure()
