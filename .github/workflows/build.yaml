@@ -55,7 +55,7 @@ jobs:
         --storepass $(gcloud auth print-access-token)
         --keystore projects/dvc-artifact-signing/locations/global/keyRings/code-signing
         --alias windows
-        --certfile certificate.pem
+        --certfile certificate-chain.pem
         --tsmode RFC3161
         --tsaurl http://timestamp.digicert.com
         --alg SHA-256
