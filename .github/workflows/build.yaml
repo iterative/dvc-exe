@@ -48,8 +48,8 @@ jobs:
     - uses: azure/trusted-signing-action@v0
       with:
         endpoint: https://eus.codesigning.azure.net/
-        trusted-signing-account-name: vscx-codesigning
-        certificate-profile-name: vscx-certificate-profile
+        trusted-signing-account-name: iterative
+        certificate-profile-name: dvc-exe
         files-folder: ${{ github.workspace }}
         files-folder-filter: exe
         file-digest: SHA256
