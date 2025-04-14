@@ -19,22 +19,6 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.12"
-    - uses: azure/login@v2
-      with:
-        client-id: ${{ vars.MICROSOFT_AZURE_CLIENT }}
-        tenant-id: ${{ vars.MICROSOFT_AZURE_TENANT }}
-        subscription-id: ${{ vars.MICROSOFT_AZURE_SUBSCRIPTION }}
-    - run: curl --location -O https://dvc.org/download/win/dvc-3.59.1
-    - uses: azure/trusted-signing-action@v0
-      with:
-        endpoint: https://eus.codesigning.azure.net/
-        trusted-signing-account-name: iterative
-        certificate-profile-name: dvc-exe
-        files-folder: ${{ github.workspace }}
-        files-folder-filter: exe
-        file-digest: SHA256
-        timestamp-rfc3161: http://timestamp.acs.microsoft.com
-        timestamp-digest: SHA256
     - name: Install requirements
       run: pip install -r requirements.txt
     - name: Download dvc pkg
