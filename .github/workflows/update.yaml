@@ -33,14 +33,11 @@ jobs:
       with:
         commit-message: dvc ${{ steps.latest.outputs.version }}
         title: dvc ${{ steps.latest.outputs.version }}
-        token: ${{ secrets.OLIVAW_PAT }}
-        author: Iterative Olivaw <support@iterative.ai>
     - name: Merge the PR
       if: ${{ steps.update.outputs.changes != '' }}
       run: gh pr merge --squash --delete-branch --auto ${{ steps.create-pr.outputs.pull-request-url }}
       env:
-        GITHUB_TOKEN: ${{ secrets.OLIVAW_PAT }}
-
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Send message to slack
       if: failure()
       uses: rtCamp/action-slack-notify@v2.3.3
