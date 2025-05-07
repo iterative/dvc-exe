@@ -17,6 +17,8 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v4
+    - uses: cargo-bins/cargo-binstall@main
+    - run: cargo binstall komac -y
     - name: find dvc version
       if: ${{ github.event_name == 'workflow_run' }}
       id: version
