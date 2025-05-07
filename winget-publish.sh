@@ -6,5 +6,5 @@ if [ -z "$1" ]; then
 fi
 
 komac sync-fork
-komac update Iterative.DVC --version "$1" --submit --urls https://dvc.org/download/win/"$1" --release-notes-url https://github.com/iterative/dvc/releases/tag/"$1" --submit
+komac update Iterative.DVC --version "$1" --urls https://dvc.org/download/win/"$1" --release-notes-url https://github.com/iterative/dvc/releases/tag/"$1" --submit
 komac cleanup --only-merged
