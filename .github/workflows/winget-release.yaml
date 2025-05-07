@@ -1,0 +1,41 @@
+name: Publish package to winget
+on:
+  workflow_run:
+    workflows: ["Build package"]
+    types:
+    - completed
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "DVC Version"
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: find dvc version
+      if: ${{ github.event_name == 'workflow_run' }}
+      id: version
+      run: |
+        echo version=$(awk -F'"' '/^ *VERSION *= *"/{ print $2; exit }' download.py) >> $GITHUB_OUTPUT
+    - run: ./winget-publish.sh ${{ github.event.inputs.version || steps.version.outputs.version }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.WINGET_TOKEN }}
+
+  notify:
+    if: failure()
+    needs: [publish]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2.3.3
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_MESSAGE: 'Winget publish failed for ${{ github.repository }}'
+        SLACK_TITLE: CI Status
+        SLACK_USERNAME: dvc-pkg-build
