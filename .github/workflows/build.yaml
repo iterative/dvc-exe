@@ -58,10 +58,10 @@ jobs:
     - uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: us-east-2
-        role-to-assume: arn:aws:iam::260760892802:role/dvc-public-exe-deployer
+        role-to-assume: arn:aws:iam::977611293394:role/dvc-public-exe-deployer
     - name: Upload
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-      run: python upload.py dvc-*.exe
+      run: python upload.py dvc-*.exe s3://dvc-packages/exe/
 
   notify:
     if: github.ref == 'refs/heads/main' && failure()
